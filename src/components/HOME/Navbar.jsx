@@ -20,7 +20,7 @@ import {
 import { useApp } from "../../context/AppContext";
 
 export default function Navbar() {
-  const { theme, toggleTheme, lang, toggleLang } = useApp();
+  const { theme, toggleTheme, lang, toggleLang, t } = useApp();
   const location = useLocation();
   const { scrollY } = useScroll();
   const [hiddenBottomNav, setHiddenBottomNav] = useState(false);
@@ -36,21 +36,10 @@ export default function Navbar() {
   });
 
   const navLinks = [
-    { id: 1, path: "/", en: "Home", bn: "হোম", icon: Home },
-    {
-      id: 2,
-      path: "/services",
-      en: "Services",
-      bn: "সার্ভিস",
-      icon: Briefcase,
-    },
-    { id: 3, path: "/contact", en: "Contact", bn: "যোগাযোগ", icon: Phone },
+    { id: 1, path: "/", key: "home", icon: Home },
+    { id: 2, path: "/services", key: "services", icon: Briefcase },
+    { id: 3, path: "/contact", key: "contact", icon: Phone },
   ];
-
-  const announcementMsg =
-    lang === "en"
-      ? "🔥 Special Offer! 20% off on Facebook & YouTube Ads! Order Now! 🔥"
-      : "🔥 স্পেশাল অফার! ফেসবুক এবং ইউটিউব অ্যাডস সার্ভিসে ২০% ছাড়! আজই অর্ডার করুন! 🔥";
 
   return (
     <>
@@ -78,7 +67,8 @@ export default function Navbar() {
                     transition={{ duration: 0.2 }}
                     className="inline-block"
                   >
-                    {announcementMsg}
+                   
+                    {t.announcement}
                   </motion.span>
                 </AnimatePresence>
               </motion.div>
@@ -150,7 +140,8 @@ export default function Navbar() {
                       transition={{ duration: 0.2 }}
                       className="block"
                     >
-                      {lang === "en" ? link.en : link.bn}
+                      {/* গ্লোবাল ডিকশনারি থেকে ডেটা আসছে */}
+                      {t.nav[link.key]}
                     </motion.span>
                   </AnimatePresence>
                 </Link>
@@ -251,7 +242,7 @@ export default function Navbar() {
                       : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
-                  {lang === "en" ? link.en : link.bn}
+                  {t.nav[link.key]}
                 </motion.span>
               </AnimatePresence>
             </Link>
