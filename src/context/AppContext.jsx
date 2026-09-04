@@ -7,6 +7,11 @@ export function AppProvider({ children }) {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [lang, setLang] = useState(localStorage.getItem("lang") || "en");
 
+  const [adminUser, setAdminUser] = useState(() => {
+    const savedUser = localStorage.getItem("adminData");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") {
@@ -28,10 +33,33 @@ export function AppProvider({ children }) {
     localStorage.setItem("lang", newLang);
   };
 
+  const login = (userData, token) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("adminData", JSON.stringify(userData));
+    setAdminUser(userData);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("adminData");
+    setAdminUser(null);
+  };
+
   const t = translations[lang];
 
   return (
-    <AppContext.Provider value={{ theme, toggleTheme, lang, toggleLang, t }}>
+    <AppContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+        lang,
+        toggleLang,
+        t,
+        adminUser,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
